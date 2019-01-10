@@ -1,37 +1,6 @@
 var Tx = require('ethereumjs-tx');
+var EventManager = require('../../../eventmaganer/EventManager')
 
-
-/**
- *  Return the node status, if connected peers count is greater then zero
- */
-exports.getNodeStatus = function (req, res, next) {
-
-  console.log(req.params)
-  if (req.app.locals.web3) {
-    let connectionObject = req.app.locals.web3
-    connectionObject.eth.net.isListening(function (error, result) {
-      if (error) setData('get_peer_count', error, true);
-      else {
-        // Since connected lets get the count
-        connectionObject.eth.net.getPeerCount(function (error, result) {
-          if (error) {
-            res.json({
-              error: error,
-              sucess: false
-            })
-          } else {
-            res.json({
-              peerCount: result,
-              sucess: true
-            })
-            console.log('get_peer_count', 'Peer Count: ' + result, (result == 0));
-          }
-        });
-      }
-    });
-  }
-
-}
 /**
  * Return the block data based on given block number
  */
@@ -68,7 +37,7 @@ exports.getCode = function (req, res) {
     }, function (error) {
       res.json({
         error: error,
-        message: "Either the block does not exist or block number is invalide",
+        message: "Code you requested not found",
         sucess: false
       })
     });
@@ -334,13 +303,10 @@ exports.sendSignedTransaction = function (req, res) {
 
     web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
       .on('receipt', function (data) {
-        res.json({
-          tranDetails: data,
-          sucess: true
-        })
+       EventManager.emitEvent('receipt',data)
       }).then(function (data) {
         res.json({
-          signDatas: data,
+          signData: data,
           sucess: true
         })
       }, function (error) {
@@ -515,6 +481,7 @@ exports.getBlockTransactionCount = function (req, res) {
 }
 
 exports.getNodeStatus = function(req, res, next) {
+  
   if(req.app.locals.web3) {
     let connectionObject = req.app.locals.web3
     connectionObject.eth.net.isListening(function (error, result) {

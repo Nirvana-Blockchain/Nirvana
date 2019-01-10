@@ -3,14 +3,11 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var ethRouter = require('./routes/eth')
-
-
 var app = express();
-
+var EventManager = require('./eventmaganer/EventManager')
 app.locals.web3 = require('./connection/connection.js')
 
 // view engine setup
@@ -26,6 +23,31 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/eth', ethRouter);
+
+app.use(function (req, res, next) {
+
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  // Pass to next layer of middleware
+  next();
+});
+
+
+app.use(function (req, res, next) {
+  EventManager.initClientSocket();
+  next()
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -43,4 +65,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+console.log(app.io)
 module.exports = app;
