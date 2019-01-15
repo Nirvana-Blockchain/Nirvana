@@ -16,10 +16,7 @@ exports.initClientSocket = function () {
                 appClient = client;
                 client.on('event', data => { 
                     console.log('client event')
-                });
-                // client.on('disconnect', () => { 
-                //     console.log('client disconnected')
-                // });            
+                });        
                 client.emit('news', { hello: 'world' });
                 
             });

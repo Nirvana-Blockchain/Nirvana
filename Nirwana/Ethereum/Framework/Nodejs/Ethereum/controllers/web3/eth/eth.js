@@ -617,109 +617,194 @@ exports.lockAccount = function(req, res, next) {
   }
 }
 
+exports.unlockAccount = function(req, res, next) {
+  if(req.app.locals.web3) {
+    let account = req.body.account
+    let password = req.body.password
+    let connectionObject = req.app.locals.web3
+    connectionObject.eth.personal.unlockAccount(account, password, function (error, result) {
+
+    // console.log(error,result)
+    if (error) {
+      res.json({
+        message: "something went wrong"
+      })
+    
+      //setData('lock_unlock_result', error, true);
+    } else {
+      // Result = True if unlocked, else false
+      res.json({
+        data:result,
+        sucess: true
+      })
+    }
+  });
+  }
+}
+
+/**
+ * Get the storage at a specific position of an address.
+ */
+exports.getStorageAt = function(req, res, next)
+{
+  if(req.app.locals.web3) {
+   
+    web3.eth.getStorageAt(req.body.address, req.body.position, req.body.defalutBlock)
+    .then(function(response){
+      res.json({
+        data:response,
+        sucess: true
+      })
+    }, function(error){
+      res.json({
+        data:error,
+        sucess: false
+      })
+    });
+  }
+
+}
+/**
+ * Return current gas price 
+ */
+exports.getGasPrice = function(req, res, next)
+{
+  if(req.app.locals.web3) {
+   
+    web3.eth.getGasPrice()
+    .then(function(response){
+      res.json({
+        data:response,
+        sucess: true
+      })
+    }, function(error){
+      res.json({
+        data:error,
+        sucess: false
+      })
+    });
+  }
+
+}
+
+/**
+* Return current gas price 
+*/
+exports.getHashrate = function(req, res, next)
+{
+ if(req.app.locals.web3) {
+  
+   web3.eth.getHashrate()
+   .then(function(response){
+     res.json({
+       data:response,
+       sucess: true
+     })
+   }, function(error){
+     res.json({
+       data:error,
+       sucess: false
+     })
+ 
+  });
+}
+}
 
 
+/**
+* Return current gas price 
+*/
+exports.isMining = function(req, res, next)
+{
+ if(req.app.locals.web3) {
+  
+   web3.eth.isMining()
+   .then(function(response){
+     res.json({
+       data:response,
+       sucess: true
+     })
+   }, function(error){
+     res.json({
+       data:error,
+       sucess: false
+     })
+ 
+  });
+}
+}
 
-// exports.getAccounts = function(req, res, next) {
-//   if(req.app.locals.web3) {
-//    let connectionObject = req.app.locals.web3
-//    connectionObject.eth.getAccounts(function (error, result) {
-//     if (error) {
-//       console.log(error)
-//     } else {
-//       //accounts = result;
-//      res.json({
-//        data:result,
-//        sucess: true
-//      })
-//       // You need to have at least 1 account to proceed
-//      }
-//   });
-//  }
-// }
-// exports.getAccounts = function(req, res, next) {
-//   if(req.app.locals.web3) {
-//    let connectionObject = req.app.locals.web3
-//    connectionObject.eth.getAccounts(function (error, result) {
-//     if (error) {
-//       console.log(error)
-//     } else {
-//       //accounts = result;
-//      res.json({
-//        data:result,
-//        sucess: true
-//      })
-//       // You need to have at least 1 account to proceed
-//      }
-//   });
-//  }
-// }
-// exports.getAccounts = function(req, res, next) {
-//   if(req.app.locals.web3) {
-//    let connectionObject = req.app.locals.web3
-//    connectionObject.eth.getAccounts(function (error, result) {
-//     if (error) {
-//       console.log(error)
-//     } else {
-//       //accounts = result;
-//      res.json({
-//        data:result,
-//        sucess: true
-//      })
-//       // You need to have at least 1 account to proceed
-//      }
-//   });
-//  }
-// }
-// exports.getAccounts = function(req, res, next) {
-//   if(req.app.locals.web3) {
-//    let connectionObject = req.app.locals.web3
-//    connectionObject.eth.getAccounts(function (error, result) {
-//     if (error) {
-//       console.log(error)
-//     } else {
-//       //accounts = result;
-//      res.json({
-//        data:result,
-//        sucess: true
-//      })
-//       // You need to have at least 1 account to proceed
-//      }
-//   });
-//  }
-// }
-// exports.getAccounts = function(req, res, next) {
-//   if(req.app.locals.web3) {
-//    let connectionObject = req.app.locals.web3
-//    connectionObject.eth.getAccounts(function (error, result) {
-//     if (error) {
-//       console.log(error)
-//     } else {
-//       //accounts = result;
-//      res.json({
-//        data:result,
-//        sucess: true
-//      })
-//       // You need to have at least 1 account to proceed
-//      }
-//   });
-//  }
-// }
-// exports.getAccounts = function(req, res, next) {
-//   if(req.app.locals.web3) {
-//    let connectionObject = req.app.locals.web3
-//    connectionObject.eth.getAccounts(function (error, result) {
-//     if (error) {
-//       console.log(error)
-//     } else {
-//       //accounts = result;
-//      res.json({
-//        data:result,
-//        sucess: true
-//      })
-//       // You need to have at least 1 account to proceed
-//      }
-//   });
-//  }
-// }
+function doDeployNewContract(deployecallback, deployeParam) {
+
+  // Reset the deployment results UI
+  $j("#page_loader").show();
+  var result = {
+    "transactionHash": "test",
+    "contracttransactionhash": "",
+    "confirmationNumber": "",
+    "newContractInstance": "",
+    "contractAddress": "test"
+  };
+
+  var abiDefinitionString = document.getElementById('compiled_abidefinition').value;
+  var abiDefinition = JSON.parse(abiDefinitionString);
+
+  var bytecode = document.getElementById('compiled_bytecode').value;
+
+  // 2. Create the params for deployment - all other params are optional, uses default
+  web3.eth.coinbase = "0x47C310A31Bb5eB69f7321DdF85A42c837Cd8A8b8"; //deployeParam.acc_address;
+
+  var params = {
+    from: web3.eth.coinbase,
+    gas: 4600000,
+    gasPrice: '3'
+  }
+
+  var myContract = new web3.eth.Contract(abiDefinition);
+
+  web3.eth.getGasPrice().then(function (gasPrice) {
+    params.gasPrice = gasPrice;
+    var contract =  myContract.deploy({
+      data: bytecode,
+      //uint64 maxBalance, uint64 maxSupply, string coinName,uint8 decimalPlace,string simbol, uint unitToSell
+      arguments: [1000000, 100000, 'KKII', 8, 'K', 100]
+      //arguments: [deployeParam.max_bal, deployeParam.max_sup, deployeParam.coin_name, 8, deployeParam.symbol, deployeParam.unit_to_sup]
+    });
+    contract.estimateGas().then(function(gas){
+      params.gas = gas;
+      contract.send(params, function (error, transactionHash) {
+        if (error) {
+          console.log(error);
+          $j("#page_loader").hide();
+          toastr.error(error);
+        }
+        console.log("Transaction hash " + transactionHash);
+      }).on('error', function (error) {
+        $j("#page_loader").hide();
+        toastr.error(error);
+        console.log(error);
+      })
+      .on('transactionHash', function (transactionHash) {
+        //setData('contracttransactionhash', transactionHash, false);
+        $j("#txhash").text(transactionHash);
+        setEtherscanIoLink('contracttransactionhash_link', 'tx', transactionHash);
+        result.transactionHash = transactionHash;
+       // deployecallback(result);
+        $j("#page_loader").hide();
+      })
+      .on('receipt', function (receipt) {
+        console.log(receipt.contractAddress) // contains the new contract address
+        document.getElementById('contractaddress').value = receipt.contractAddress;
+        setEtherscanIoLink('contractaddress_link', 'address', receipt.contractAddress);
+      })
+      .on('confirmation', function (confirmationNumber, receipt) {
+        console.log(confirmationNumber);
+        console.log(receipt);
+      });
+    });
+
+  }, function (error) {
+
+  });
+
 

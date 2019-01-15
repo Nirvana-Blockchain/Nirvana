@@ -89,14 +89,15 @@ class App extends React.Component {
       console.log('Socket emit new ')
     });
 
+    socket.on('NodeStatus', function(){
+      console.log('Socket emit new ')
+    });
+
   }
 
 
 componentWillMount()
 {
-  
-
-
   console.log('Mounting component')
   this.getNodeStatus()
 }
