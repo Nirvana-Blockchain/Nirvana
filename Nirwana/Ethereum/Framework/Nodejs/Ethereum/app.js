@@ -20,10 +20,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/eth', ethRouter);
-
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
@@ -42,6 +38,12 @@ app.use(function (req, res, next) {
   // Pass to next layer of middleware
   next();
 });
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/eth', ethRouter);
+
+
 
 
 app.use(function (req, res, next) {

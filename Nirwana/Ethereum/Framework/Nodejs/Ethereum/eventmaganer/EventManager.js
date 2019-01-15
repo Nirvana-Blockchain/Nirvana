@@ -9,18 +9,17 @@ exports.initClientSocket = function () {
     if(clientSocket === undefined)
     {
         clientSocket = global.io 
-        io.on('connection', client => 
+      
+        clientSocket.on('connection', client => 
             {
+                console.log('CLient connected');
                 appClient = client;
                 client.on('event', data => { 
                     console.log('client event')
                 });
-
-
-                client.on('disconnect', () => { 
-                    console.log('client disconnected')
-                });          
-                
+                // client.on('disconnect', () => { 
+                //     console.log('client disconnected')
+                // });            
                 client.emit('news', { hello: 'world' });
                 
             });

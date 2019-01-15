@@ -11,6 +11,8 @@ import classNames from 'classnames';
 import purple from '@material-ui/core/colors/purple';
 import green from '@material-ui/core/colors/green';
 
+import io from 'socket.io-client';
+
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles , MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
@@ -69,9 +71,32 @@ class App extends React.Component {
     peerCount:0
   };
 
+  setupSocket()
+  {
+    const socket = io('https://957cfa28.ngrok.io', { transport : ['websocket'] });
+   
+    socket.on('connect', function(){
+      console.log('Socket Connected')
+    });
+    socket.on('event', function(data){
+      console.log('Socket event')
+    });
+    socket.on('disconnect', function(){
+      console.log('Socket disconnect')
+    });
+
+    socket.on('news', function(){
+      console.log('Socket emit new ')
+    });
+
+  }
+
 
 componentWillMount()
 {
+  
+
+
   console.log('Mounting component')
   this.getNodeStatus()
 }
@@ -85,8 +110,9 @@ componentWillMount()
     fetch(AppConfig.config.serverUrl + `/eth/getNodeStatus`)
       .then(response => response.json())
       .then(data => {
-              this.setState({peerCount:data.peerCount}
-          )})
+              this.setState({peerCount:data.peerCount})
+              this.setupSocket()
+        })
       .catch(e => e)
   }
 
@@ -94,8 +120,9 @@ componentWillMount()
     fetch(AppConfig.config.serverUrl + `/eth/getCode`)
       .then(response => response.json())
       .then(data => {
-              this.setState({peerCount:data.peerCount}
-          )})
+              //this.setState({peerCount:data.peerCount} )
+             
+            })
       .catch(e => e)
   }
 

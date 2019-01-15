@@ -463,6 +463,7 @@ exports.getUncle = function (req, res) {
  */
 exports.getBlockTransactionCount = function (req, res) {
 
+
   if (req.app.locals.web3) {
     
     let connectionObject = req.app.locals.web3
@@ -481,7 +482,7 @@ exports.getBlockTransactionCount = function (req, res) {
 }
 
 exports.getNodeStatus = function(req, res, next) {
-  
+  EventManager.initClientSocket();
   if(req.app.locals.web3) {
     let connectionObject = req.app.locals.web3
     connectionObject.eth.net.isListening(function (error, result) {

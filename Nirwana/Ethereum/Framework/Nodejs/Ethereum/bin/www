@@ -19,8 +19,14 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
-global.io = require('socket.io')(server);
+
+var server = http.Server(app);
+global.io = require('socket.io')(server );
+global.io .origins('*:*');
+
+
+app.set('socketio', global.io); 
+app.set('server', server);
 
 
 
