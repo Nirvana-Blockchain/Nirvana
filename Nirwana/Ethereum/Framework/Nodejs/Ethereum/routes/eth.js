@@ -7,7 +7,7 @@ var eth = require('../controllers/web3/eth/eth')
 //Middle Ware to be added
 router.get('/getNodeStatus', eth.getNodeStatus);
 router.post('/createWallet', eth.createWallet)
-router.post('/createAccount', eth.createAccount)
+
 router.get('/getAccounts', eth.getAccounts)
 router.post('/getBalance', eth.getBalance)
 router.post('/lockAccount', eth.lockAccount)

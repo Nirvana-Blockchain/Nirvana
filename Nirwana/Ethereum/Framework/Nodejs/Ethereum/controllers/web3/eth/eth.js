@@ -303,7 +303,7 @@ exports.sendSignedTransaction = function (req, res) {
 
     web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
       .on('receipt', function (data) {
-       EventManager.emitEvent('receipt',data)
+        EventManager.emitEvent('receipt', data)
       }).then(function (data) {
         res.json({
           signData: data,
@@ -327,7 +327,7 @@ exports.sendSignedTransaction = function (req, res) {
 exports.getTransactionCount = function (req, res) {
 
   if (req.app.locals.web3) {
-    
+
     let connectionObject = req.app.locals.web3
     connectionObject.eth.getTransactionCount(req.body.address, req.body.defalutBlock).then(function (data) {
       res.json({
@@ -352,7 +352,7 @@ exports.getTransactionCount = function (req, res) {
 exports.getTransactionReceipt = function (req, res) {
 
   if (req.app.locals.web3) {
-    
+
     let connectionObject = req.app.locals.web3
     connectionObject.eth.getTransactionReceipt(req.body.tranHash).then(function (data) {
       res.json({
@@ -379,7 +379,7 @@ exports.getTransactionReceipt = function (req, res) {
 exports.getTransactionFromBlock = function (req, res) {
 
   if (req.app.locals.web3) {
-    
+
     let connectionObject = req.app.locals.web3
     connectionObject.eth.getTransactionFromBlock(req.body.string, req.body.index).then(function (data) {
       res.json({
@@ -402,10 +402,10 @@ exports.getTransactionFromBlock = function (req, res) {
    req.body.hash =  The transaction hash. 
   
  */
-exports.getTransaction= function (req, res) {
+exports.getTransaction = function (req, res) {
 
   if (req.app.locals.web3) {
-    
+
     let connectionObject = req.app.locals.web3
     connectionObject.eth.getTransaction(req.body.hash, req.body.index).then(function (data) {
       res.json({
@@ -435,9 +435,9 @@ exports.getTransaction= function (req, res) {
 exports.getUncle = function (req, res) {
 
   if (req.app.locals.web3) {
-    
+
     let connectionObject = req.app.locals.web3
-    connectionObject.eth.getUncle(req.body.string, req.body.index , req.body.transectionHashArray).then(function (data) {
+    connectionObject.eth.getUncle(req.body.string, req.body.index, req.body.transectionHashArray).then(function (data) {
       res.json({
         transectionData: data,
         sucess: true
@@ -465,7 +465,7 @@ exports.getBlockTransactionCount = function (req, res) {
 
 
   if (req.app.locals.web3) {
-    
+
     let connectionObject = req.app.locals.web3
     connectionObject.eth.getBlockTransactionCount(req.body.string).then(function (data) {
       res.json({
@@ -481,208 +481,183 @@ exports.getBlockTransactionCount = function (req, res) {
   }
 }
 
-exports.getNodeStatus = function(req, res, next) {
+exports.getNodeStatus = function (req, res, next) {
   EventManager.initClientSocket();
-  if(req.app.locals.web3) {
+  if (req.app.locals.web3) {
     let connectionObject = req.app.locals.web3
     connectionObject.eth.net.isListening(function (error, result) {
       if (error) {
         res.json({
-          error:error,
-          sucess:false
+          error: error,
+          sucess: false
         })
       }
       else {
-      // Since connected lets get the count
+        // Since connected lets get the count
         connectionObject.eth.net.getPeerCount(function (error, result) {
           if (error) {
             res.json({
               error: error,
-              sucess:false
+              sucess: false
             })
           } else {
-              res.json({
-                peerCount: result,
-                sucess: true
-              })
-              console.log('get_peer_count', 'Peer Count: ' + result, (result == 0));
-            }
+            res.json({
+              peerCount: result,
+              sucess: true
+            })
+            console.log('get_peer_count', 'Peer Count: ' + result, (result == 0));
+          }
         });
       }
     });
   }
 }
 
-exports.createWallet = function(req, res, next) {
-  if(req.app.locals.web3) {
+exports.createWallet = function (req, res, next) {
+  if (req.app.locals.web3) {
     console.log(req.body)
     let connectionObject = req.app.locals.web3
     const number0fAccounts = req.body.number0fAccounts ? req.body.number0fAccounts : 1
-    const entropyString = req.body.secret ? req.body.secret : '54674321§3456764321§345674321§3453647544±±±§±±±!!!43534534534534'   
-      var wallet = connectionObject.eth.accounts.wallet.create(number0fAccounts, entropyString);      
-      console.log(wallet)
-      res.json({
-        sucess:true,
-        data:wallet[0]
-      })
-    }
+    const entropyString = req.body.secret ? req.body.secret : '54674321§3456764321§345674321§3453647544±±±§±±±!!!43534534534534'
+    var wallet = connectionObject.eth.accounts.wallet.create(number0fAccounts, entropyString);
+    console.log(wallet)
+    res.json({
+      sucess: true,
+      data: wallet[0]
+    })
+  }
 }
 
 
-//Creates an account
-exports.createAccount = function(req, res, next) {
-  if(req.app.locals.web3) {
-    console.log(req.body)
-    var result ={}
+
+
+
+
+exports.getAccounts = function (req, res, next) {
+  if (req.app.locals.web3) {
     let connectionObject = req.app.locals.web3
-    const password = req.body.password
-    const tempaddress = req.body.tempaddress
-
-    connectionObject.eth.personal.newAccount(password, function (err, address) {
-      console.log(address)
-      result.address = address;
-    // Passphrase = testimpetus password = mynewaccount
-      connectionObject.eth.personal.sign(tempaddress, address, password).then(function (signTransection) {
-        result.signTransection = signTransection;
-          res.json({
-            data: result,
-            message: "Account Created Sucessfully",
-            sucess: true
-          })
-      }, function (error) {
-
-      });
+    connectionObject.eth.getAccounts(function (error, result) {
+      if (error) {
+        console.log(error)
+      } else {
+        //accounts = result;
+        res.json({
+          data: result,
+          sucess: true
+        })
+        // You need to have at least 1 account to proceed
+      }
     });
   }
 }
 
 
 
-exports.getAccounts = function(req, res, next) {
-  if(req.app.locals.web3) {
-    let connectionObject = req.app.locals.web3
-    connectionObject.eth.getAccounts(function (error, result) {
-    if (error) {
-      console.log(error)
-    } else {
-      //accounts = result;
-      res.json({
-        data:result,
-        sucess: true
-      })
-      // You need to have at least 1 account to proceed
-     }
-  });
-  }
-}
-
-exports.getBalance = function(req, res, next) {
-  if(req.app.locals.web3) {
+exports.getBalance = function (req, res, next) {
+  if (req.app.locals.web3) {
     let accountAdd = req.body.accountAdd
     let connectionObject = req.app.locals.web3
     connectionObject.eth.getBalance(accountAdd, connectionObject.eth.defaultBlock, function (error, result) {
-    // Convert the balance to ethers
-    let bal = connectionObject.utils.fromWei(result, 'ether');
-    res.json({
-      data: bal,
-      sucess:true
-    })
-  });
+      // Convert the balance to ethers
+      let bal = connectionObject.utils.fromWei(result, 'ether');
+      res.json({
+        data: bal,
+        sucess: true
+      })
+    });
   }
 }
 
 
-exports.lockAccount = function(req, res, next) {
-  if(req.app.locals.web3) {
+exports.lockAccount = function (req, res, next) {
+  if (req.app.locals.web3) {
     let account = req.body.account
     let password = req.body.password
     let connectionObject = req.app.locals.web3
     connectionObject.eth.personal.unlockAccount(account, password, function (error, result) {
 
-    // console.log(error,result)
-    if (error) {
-      res.json({
-        message: "something went wrong"
-      })
-    
-      //setData('lock_unlock_result', error, true);
-    } else {
-      // Result = True if unlocked, else false
-      res.json({
-        data:result,
-        sucess: true
-      })
-    }
-  });
+      // console.log(error,result)
+      if (error) {
+        res.json({
+          message: "something went wrong"
+        })
+
+        //setData('lock_unlock_result', error, true);
+      } else {
+        // Result = True if unlocked, else false
+        res.json({
+          data: result,
+          sucess: true
+        })
+      }
+    });
   }
 }
 
-exports.unlockAccount = function(req, res, next) {
-  if(req.app.locals.web3) {
+exports.unlockAccount = function (req, res, next) {
+  if (req.app.locals.web3) {
     let account = req.body.account
     let password = req.body.password
     let connectionObject = req.app.locals.web3
     connectionObject.eth.personal.unlockAccount(account, password, function (error, result) {
 
-    // console.log(error,result)
-    if (error) {
-      res.json({
-        message: "something went wrong"
-      })
-    
-      //setData('lock_unlock_result', error, true);
-    } else {
-      // Result = True if unlocked, else false
-      res.json({
-        data:result,
-        sucess: true
-      })
-    }
-  });
+      // console.log(error,result)
+      if (error) {
+        res.json({
+          message: "something went wrong"
+        })
+
+        //setData('lock_unlock_result', error, true);
+      } else {
+        // Result = True if unlocked, else false
+        res.json({
+          data: result,
+          sucess: true
+        })
+      }
+    });
   }
 }
 
 /**
  * Get the storage at a specific position of an address.
  */
-exports.getStorageAt = function(req, res, next)
-{
-  if(req.app.locals.web3) {
-   
+exports.getStorageAt = function (req, res, next) {
+  if (req.app.locals.web3) {
+
     web3.eth.getStorageAt(req.body.address, req.body.position, req.body.defalutBlock)
-    .then(function(response){
-      res.json({
-        data:response,
-        sucess: true
-      })
-    }, function(error){
-      res.json({
-        data:error,
-        sucess: false
-      })
-    });
+      .then(function (response) {
+        res.json({
+          data: response,
+          sucess: true
+        })
+      }, function (error) {
+        res.json({
+          data: error,
+          sucess: false
+        })
+      });
   }
 
 }
 /**
  * Return current gas price 
  */
-exports.getGasPrice = function(req, res, next)
-{
-  if(req.app.locals.web3) {
-   
+exports.getGasPrice = function (req, res, next) {
+  if (req.app.locals.web3) {
+
     web3.eth.getGasPrice()
-    .then(function(response){
-      res.json({
-        data:response,
-        sucess: true
-      })
-    }, function(error){
-      res.json({
-        data:error,
-        sucess: false
-      })
-    });
+      .then(function (response) {
+        res.json({
+          data: response,
+          sucess: true
+        })
+      }, function (error) {
+        res.json({
+          data: error,
+          sucess: false
+        })
+      });
   }
 
 }
@@ -690,48 +665,46 @@ exports.getGasPrice = function(req, res, next)
 /**
 * Return current gas price 
 */
-exports.getHashrate = function(req, res, next)
-{
- if(req.app.locals.web3) {
-  
-   web3.eth.getHashrate()
-   .then(function(response){
-     res.json({
-       data:response,
-       sucess: true
-     })
-   }, function(error){
-     res.json({
-       data:error,
-       sucess: false
-     })
- 
-  });
-}
+exports.getHashrate = function (req, res, next) {
+  if (req.app.locals.web3) {
+
+    web3.eth.getHashrate()
+      .then(function (response) {
+        res.json({
+          data: response,
+          sucess: true
+        })
+      }, function (error) {
+        res.json({
+          data: error,
+          sucess: false
+        })
+
+      });
+  }
 }
 
 
 /**
 * Return current gas price 
 */
-exports.isMining = function(req, res, next)
-{
- if(req.app.locals.web3) {
-  
-   web3.eth.isMining()
-   .then(function(response){
-     res.json({
-       data:response,
-       sucess: true
-     })
-   }, function(error){
-     res.json({
-       data:error,
-       sucess: false
-     })
- 
-  });
-}
+exports.isMining = function (req, res, next) {
+  if (req.app.locals.web3) {
+
+    web3.eth.isMining()
+      .then(function (response) {
+        res.json({
+          data: response,
+          sucess: true
+        })
+      }, function (error) {
+        res.json({
+          data: error,
+          sucess: false
+        })
+
+      });
+  }
 }
 
 

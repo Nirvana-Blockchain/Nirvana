@@ -6,6 +6,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var ethRouter = require('./routes/eth')
+var personalRouter = require('./routes/personal')
+var accountRouter = require('./routes/account')
 var app = express();
 var EventManager = require('./eventmaganer/EventManager')
 app.locals.web3 = require('./connection/connection.js')
@@ -42,6 +44,8 @@ app.use(function (req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/eth', ethRouter);
+app.use('/account', accountRouter);
+app.use('/personal', personalRouter)
 
 
 
@@ -52,12 +56,12 @@ app.use(function (req, res, next) {
 })
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
