@@ -49,7 +49,7 @@ exports.unlockAccount = function (req, res, next) {
         if (error) {
             res.json({
                 error: error,
-                message: "Account Created Sucessfully",
+                message: "Account unloacked",
                 sucess: true
             })
         } else {
@@ -60,3 +60,33 @@ exports.unlockAccount = function (req, res, next) {
         }
     });
 }
+
+
+/**
+* Unlocks the account
+* UNLOCK/LOCK not supported in TestRPC
+* Ignored in MetaMask
+*/
+
+exports.lockAccount = function (req, res) {
+
+    var account = req.body.accountAdd;
+
+    web3.eth.personal.lockAccount(account)
+        .then(function (error, result) {
+
+            if (error) {
+                res.json({
+                    error: error,
+                    message: "Unable to lock account",
+                    sucess: true
+                })
+            } else {
+                res.json({
+                    message: "Loacked",
+                    sucess: true
+                })
+            }
+        });
+}
+

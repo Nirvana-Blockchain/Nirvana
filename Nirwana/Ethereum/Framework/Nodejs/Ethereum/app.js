@@ -8,6 +8,9 @@ var usersRouter = require('./routes/users');
 var ethRouter = require('./routes/eth')
 var personalRouter = require('./routes/personal')
 var accountRouter = require('./routes/account')
+var subscriptionRouter = require('./routes/subscription')
+var ensRouter = require('./routes/ens')
+
 var app = express();
 var EventManager = require('./eventmaganer/EventManager')
 app.locals.web3 = require('./connection/connection.js')
@@ -46,9 +49,8 @@ app.use('/users', usersRouter);
 app.use('/eth', ethRouter);
 app.use('/account', accountRouter);
 app.use('/personal', personalRouter)
-
-
-
+app.use('/subscribe', subscriptionRouter)
+app.use('/subscribe', ensRouter)
 
 app.use(function (req, res, next) {
   EventManager.initClientSocket();
