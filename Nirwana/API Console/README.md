@@ -1,26 +1,21 @@
-# React Redux Core UI Admin Panel
+## Subscriber Console Module
 
-This project was generated with [React Script](https://www.npmjs.com/package/react-scripts).
+***
+#### Project Structure
+* `app/`: We use the container/component architecture. `containers/` contains React components which are connected to the redux store. `components/` contains dumb React components which depend on containers for data. **Container components care about how things work, while components care about how things look.**
+* `internals/`: This includes compilation configuration as your source code cannot be executed as-is in the web browser. It needs to pass through webpack to get converted into a version of Javascript that web browsers understand. you won't have to mess around with this folder much.
+* `server/`: As the name suggests, this folder contains backend server configuration.
 
-## Installation
-
-Clone the repository
-
-    git clone https://github.com/rmemon/react-redux-admin-panel
-
-Switch to the repo folder
-
-    cd react-redux-admin-panel
-
-Install the dependencies using npm
-
-    npm install
-
-## Development server
-
-Run `npm start` for a dev server. Navigate to `http://localhost:3000/`. The app will automatically reload if you change any of the source files.
+#### Starting Development
++ clone git repo.
++ run `npm install` to install needed packages.
++ run `npm run start` to launch the application. If you start browsing at https://localhost:3000
++ 
+#### Deployment
++ run `npm run build` to build production bundle of front-end app.
++ OR 
++ run `npm run start:production` to start both backend and frontend services in production mode.
 
 
-## Build
-
-Run `npm run build` to build the project. The build artifacts will be stored in the `build/` directory. Use the `-prod` flag for a production build.
+###### Reference links
++ [React Boilerplate](https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/general)
