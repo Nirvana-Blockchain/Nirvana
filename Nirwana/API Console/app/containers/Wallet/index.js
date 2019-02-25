@@ -31,10 +31,80 @@ class Wallet extends Component {
    
     render() {
 
-    	return (<div>
-    		Wallet
-        
-            </div> )
+    	return (
+
+       <div>
+        <div className = "row"> 
+          <div className="card col-sm-12">
+           <div className="card-header">
+            <h3> Accounts List </h3>
+           </div>
+            <div className="card-body">
+            <form className="form-inline" style={{padding: "40px", border: "1px solid lightgrey"}}>
+
+                  <label className="sr-only" for="inlineFormInputName2">Account Name</label>
+                  <input type="text" className="form-control mb-3 mr-sm-3 mb-sm-0" id="inlineFormInputName2" placeholder="Account Name"></input>
+              
+              
+                  <label className="sr-only" for="inlineFormInputName2">Pass Phrase</label>
+                  <input type="text" style={{"marginLeft": "40px"}} className="form-control mb-3 mr-sm-3 mb-sm-0" id="inlineFormInputName2" placeholder="Pass Phrase"></input>
+             
+                  <label className="sr-only" for="inlineFormInputName2">Password</label>
+                  <input type="text" style={{"marginLeft": "40px"}} className="form-control mb-3 mr-sm-3 mb-sm-0" id="inlineFormInputName2" placeholder="Password"></input>
+                  <a  style={{"marginLeft": "40px"}}  className= "btn btn-success btn-xs" href ="javascript:void(0)"> Add Account </a>
+             </form>
+              <table className="table" style={{marginTop: "30px"}}>
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Impetus_ICO</td>
+                    <td>0x70C838d7e320e21641e596948a8F7DB11fe9E8B7</td>
+                    <td>14.748249564 </td>
+                    <td> <a className= "btn btn-success btn-xs" href ="javascript:void(0)"> Get Balance </a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Transility_ICO</td>
+                    <td>0x70C838d7e320e21641e596948a8F7DB11fe9E8B7</td>
+                    <td>1.996679334 </td>
+                    <td> <a className= "btn btn-success btn-xs" href ="javascript:void(0)"> Get Balance </a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Impetus_ICO</td>
+                    <td>0x70C838d7e320e21641e596948a8F7DB11fe9E8B7</td>
+                    <td>0 </td>
+                    <td> <a className= "btn btn-success btn-xs" href ="javascript:void(0)"> Get Balance </a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>ImpeutsAccount  </td>
+                    <td>0x70C838d7e320e21641e596948a8F7DB11fe9E8B7</td>
+                    <td>14.748249564 </td>
+                    <td> <a className= "btn btn-success btn-xs" href ="javascript:void(0)"> Get Balance </a></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Impetus_ICO</td>
+                    <td>0x70C838d7e320e21641e596948a8F7DB11fe9E8B7</td>
+                    <td>14.748249564 </td>
+                    <td> <a className= "btn btn-success btn-xs" href ="javascript:void(0)"> Get Balance </a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+      </div> 
+      </div>)
         
     }
 }
