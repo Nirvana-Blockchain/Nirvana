@@ -3,7 +3,7 @@ var router = express.Router();
 var ens = require('../controllers/web3/ens/ens')
 
 
-router.post('/registry', ens.registry)
+// router.post('/registry', ens.registry)
 router.post('/resolver', ens.resolver)
 router.post('/getAddress', ens.getAddress)
 router.post('/setAddress', ens.setAddress)
