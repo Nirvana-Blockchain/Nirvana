@@ -44,28 +44,28 @@ exports.doDeployNewContract = function (req, res) {
           res.json({
             error: error,
             message: "Error in deploying contact",
-            sucess: false
+            success: false
           })
         } else {
           res.json({
             transactionHash: transactionHash,
-            sucess: false
+            success: false
           })
         }
         console.log("Transaction hash " + transactionHash);
       }).on('error', function (error) {
         console.log(error);
-        EventManager.emitEvent('error:contract', error)
+        EventManager.emitEvent('prebuild:error:contract', error)
       })
         .on('transactionHash', function (transactionHash) {
-          EventManager.emitEvent('transactionHash:contract', error)
+          EventManager.emitEvent('prebuild:transactionHash:contract', error)
         })
         .on('receipt', function (receipt) {
           console.log(receipt.contractAddress) // contains the new contract address
-          EventManager.emitEvent('receipt:contract', receipt)
+          EventManager.emitEvent('prebuild:receipt:contract', receipt)
         })
         .on('confirmation', function (confirmationNumber, receipt) {
-          EventManager.emitEvent('confirmation:contract', confirmationNumber)
+          EventManager.emitEvent('prebuild:confirmation:contract', confirmationNumber)
         });
     });
 
@@ -73,7 +73,7 @@ exports.doDeployNewContract = function (req, res) {
     res.json({
       error: error,
       message: "Error in deploying contact",
-      sucess: false
+      success: false
     })
   });
 }
