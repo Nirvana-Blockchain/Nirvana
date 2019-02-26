@@ -15,7 +15,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Spinner } from 'react-redux-spinner';
 
 import LoginPage from 'containers/LoginPage/Loadable'
-import SignupPage from 'containers/SignupPage'
 import HomePage from 'containers/HomePage'
 
 
@@ -34,7 +33,6 @@ export default function App() {
             </Helmet>
             <Switch>
                 <Route exact path="/login" component={LoginPage} />
-                <Route exact path="/signup" component={SignupPage} />
                 <Route path="/app" render={() => (
                     sessionStorage.getItem('subId') ? (
                         <HomePage />                        
