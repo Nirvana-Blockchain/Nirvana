@@ -13,4 +13,4 @@ Following features are in plan for Nirvana upcoming releases:
 ## About Us
 Nirvana is originated by Transility, an ‘end-to-end’ IT product development and consultancy company. Transility has been working with some of the leading USA companies from more than a decade, offering its technology expertise and experience. For more information, visit: http://transility.com
 
-                                       Developed by www.transility.com, Connect us at connect@transility.com
+                Developed by www.transility.com, Connect us at connect@transility.com
