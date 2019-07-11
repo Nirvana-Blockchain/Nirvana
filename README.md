@@ -1,17 +1,13 @@
 # Nirvana
-It is an Open Source Framework for Blockchain Infrastructure setup. 
+It is an Open Source Framework for rapid Blockchain Infrastructure setup and provide proper doucmentation along with major customizable component like explorer, wallet and related Dapps for seting up your own private/ Semi-private blockchain.
+
 Following features are in plan for Nirvana upcoming releases:
  * Support of multi-cloud (AWS, Azure, GCP etc.)
- * Support of differnt Blockchain frameworks like Ethereum, NEO etc.
-
-## Components
-* REST API Interface: Generic and simple to use API's as a wrapper on Blockchain frameworks like Ethereum.
-* Configuration Console: An interface to provide inputs for your Blockchain infrastructure setup.
-* Event Hander: It enables the DApp's for differnt events communication.
+ * Support of differnt Blockchain frameworks like Ethereum, EOS and hyperledger-fabric
 
 ## Why Nirvana
- * It is easy to use. 
- * Developers / Companies can focus on their actual Blockchain application.
+ * It is easy to setup/use. 
+ * Provide support for multiple blockchain.
 
 
 ## About Us
