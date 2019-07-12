@@ -1,0 +1,264 @@
+
+<!-- saved from url=(0078)http://abhyaas.edusquares.com/abhyaas/popup/OnlineTest.do?reqCode=preStartTest -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link href="./Start Test_files/mystyle.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="./Start Test_files/style.css" type="text/css"><script type="text/javascript">var imgsrc="/abhyaas/strutsLayoutConfig/images/"; var scriptsrc="/abhyaas/strutsLayoutConfig/"; var langue="en"; var contextPath="/abhyaas";</script><script type="text/javascript" src="./Start Test_files/javascript.js"></script>
+<script type="text/javascript" src="./Start Test_files/tf-config.js"></script>
+
+
+
+
+
+  <title>Start Test</title>
+    <link rel="stylesheet" href="./Start Test_files/jquery-ui.css">
+    <script src="./Start Test_files/jquery-1.8.2.js"></script>
+    <script src="./Start Test_files/jquery-ui-1.9.1.custom.js"></script>
+    <script type="text/javascript">jQuery.noConflict();</script>
+    
+      <script type="text/javascript">
+        var GB_ROOT_DIR = "/abhyaas/greybox/";
+        var showElement;
+        var dataElement;
+        var doNotRefresh=false;
+        function reLoadPage()
+        {
+            setTimeout("refresh()",1);
+        }
+        function refreshT()
+        {
+            window.opener.history.go(0);
+        }
+      function startTest(testId,enqid,id)
+        {
+            var eligibleFlag=true,message='';
+            var errorMsg="";
+            
+            var testConsentValue = document.forms[0].elements['testConsent'].checked;
+            var url="/abhyaas/popup/OnlineTest.do?reqCode=initiateOnlineTest&testId="+testId+"&enquiryId="+enqid+"&enrollmentId="+id+"&testFeedbackResponse=no";
+            if(eligibleFlag && testConsentValue)
+            {
+                window.location.replace( url );
+                /*var form=document.forms[0];
+                form.action="/abhyaas/popup/OnlineTest.do?reqCode=initiateOnlineTest";
+                //form.elements["reqCode"].value="initiateOnlineTest";
+                form.elements["testId"].value=testId;
+                form.elements["enquiryId"].value=enqid;
+                form.elements["enrollmentId"].value=id;
+                // setting form target to a window named 'formresult'
+                form.setAttribute("target", "formresult");
+                // creating the 'formresult' window with custom features prior to submitting the form
+                var params  = 'width='+screen.width;
+                params += ', height='+screen.height;
+                params += ', top=0, left=0'
+                params += ', fullscreen=yes';
+                //window.open('ot.html', 'formresult', 'scrollbars=no,menubar=no,height=600,width=800,resizable=yes,toolbar=no,status=no,fullscreen=yes');
+                window.open('dummy.html', 'formresult',params);
+                form.submit();*/
+            }
+            else
+            {
+                alert(message);
+                if(!testConsentValue){
+                    errorMsg += "Please select checkbox";
+                }
+
+                alert(errorMsg);
+                opener.testElement=1;
+                opener.reLoadPage();
+            }
+        }
+        function getRegistered(testId)
+        {
+            var href="/abhyaas/popup/studentEnquiry.do?reqCode=preCreateForSelfRegistration&testId="+testId+"&testCategory=null";
+            GB_showCenter('Registration',href,420,550);
+        }
+        jQuery(function(){
+            jQuery("#start").click(function(){
+                var testConsentValue = document.forms[0].elements['testConsent'].checked;
+                if(!testConsentValue) {
+                    alert("Please select checkbox");
+                }
+                else{
+                    jQuery( "#dialog-form" ).dialog( "open" );
+                }
+            });
+        });
+        jQuery(function() {
+            var testpassword = jQuery( "#testpassword" );
+            var testMasterPassword = jQuery( "#testMasterPassword" );
+            var resumeTest = jQuery( "#resumeTest" );
+            var enrollmentId=jQuery("#reqEnrId").html();
+            var enqid=jQuery("#reqEnqId").html();
+            jQuery( "#dialog-form" ).dialog({
+                position: 'top',
+                autoOpen: false,
+                modal: true,
+                buttons: {
+                    "Start Test": function() {
+                        jQuery("#loading").html("");
+                        if(testpassword.val()==""){
+                            jQuery("#loading").html('<div style="color:red;">* Password(s) cannot be blank.</div>');
+                            return;
+                        }
+                        var postdata={"testId": document.forms[0].elements["req_testid"].value,"password": testpassword.val(),"testMasterPassword": testMasterPassword.val(),"resumeTest": resumeTest.val()};
+                        jQuery.ajax({
+                            type: 'post',
+                            url: "/abhyaas/popup/testSearch.do?reqCode=checkTestPassword&enrollmentId="+enrollmentId+"&enquiryId="+enqid,
+                            data: postdata,
+                            beforeSend:function(){
+                                jQuery("#loading").html('<div class="centered">&nbsp;&nbsp;&nbsp;<img src="https://tuningfork-static-file-server.s3.amazonaws.com/images/avatar_load.gif" class="centered" alt="Loading Content"/>&nbsp;&nbsp;&nbsp;Please wait while checking ...</div>')
+                            }  ,
+                            success: function(resp){
+                                var result = jQuery.trim(resp);
+                                if(result=="success"){
+                                    var testid=jQuery("#reqTestId").html();
+                                    var enqid=jQuery("#reqEnqId").html();
+                                    var enrid=jQuery("#reqEnrId").html();
+                                    var url="/abhyaas/popup/OnlineTest.do?reqCode=initiateOnlineTest&testId="+testid+"&enquiryId="+enqid+"&enrollmentId="+enrid+"&testFeedbackResponse=no";
+                                    window.location.replace( url );
+                                }
+                                if(result=="fail"){
+                                    jQuery("#loading").html('<div style="color:red;">* Incorrect credentials.</div>');
+                                }
+                            }
+                        });
+                    },
+                    Cancel: function() {
+                        jQuery( this ).dialog( "close" );
+                        jQuery( "#testpassword" ).val("");
+                        jQuery("#loading").html("");
+                    }
+                }
+            });
+        });
+      </script>
+      <style type="text/css">
+          .textbox{
+              height: 25px;font-size:12px;border-radius:5px;moz-border-radius:5px;webkit-border-radius:5px;border: 2px solid #DDDDDD;
+          }
+          .centered{vertical-align:middle}
+          .scrollable-content{
+              max-height:75vh ! important;overflow: auto;
+          }
+      </style>
+</head>
+    <body cz-shortcut-listen="true">
+        <script type="text/javascript" src="./Start Test_files/AJS.js"></script>
+        <script type="text/javascript" src="./Start Test_files/AJS_fx.js"></script>
+        <script type="text/javascript" src="./Start Test_files/gb_scripts.js"></script>
+        <link href="./Start Test_files/gb_styles.css" rel="stylesheet" type="text/css">
+        <form name="OnlineTestForm" method="POST" action="http://abhyaas.edusquares.com/abhyaas/popup/OnlineTest.do">
+<table cellspacing="0" cellpadding="0" border="0" width="100%"><tbody><tr><td valign="top"><table cellspacing="1" cellpadding="1" border="0" width="100%">
+<input type="hidden" name="reqCode" value="">
+<tbody><tr><td><table width="100%" border="0">
+<tbody><tr><td colspan="2">&nbsp;</td></tr>
+
+            <input type="hidden" name="testId" value="">
+            <input type="hidden" name="enquiryId" value="">
+            <input type="hidden" name="enrollmentId" value="">
+            
+            <tr><td colspan="2"><table border="0" cellspacing="0" cellpadding="0" class="boxContainer" width="100%"><tbody><tr>
+                <input type="hidden" name="req_testid" value="160">
+                
+                    <td colspan="2" class="pageHeader">
+                        CLAT Diagnostic Test
+                    </td>
+
+                    </tr><tr><td colspan="2" class="boxBody">
+                        <table border="0" cellspacing="20" cellpadding="0" class="" width="100%"><tbody><tr>
+                            <td colspan="2" width="100%">
+                                
+                                    
+                                        <table border="0" cellspacing="3" cellpadding="0" width="100%"><tbody><tr>
+                                            
+                                                <th colspan="2"><font size="2">Total Questions: 40</font></th>
+
+                                            
+                                            <th colspan="2"><div align="right"><font size="2">Time Duration: 00:30:00</font></div></th>
+
+                                        </tr></tbody></table>
+                                        
+                                            <table border="0" cellspacing="2" cellpadding="0" width="100%"><tbody><tr>
+                                                
+                                                
+                                                    <th colspan="2"><div align="right"><font size="2">Time Remaining: 00:30:00</font></div></th>
+
+                                                
+                                            </tr></tbody></table>
+                                        
+                                    
+                                
+                                
+                                
+                                
+                            </td><td>&nbsp;</td>
+
+                            
+                            </tr><tr><td colspan="2" class="scrollable-content">
+                                <font size="2"><br><br><b>CLAT Diagnostic Test :</b><br><p style="text-align: center;">	<span style="color:#000;"><strong><span style="font-size: 16px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">Please read the instructions carefully</span></span></strong></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;"><strong style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">General Instructions:</strong></span></span></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">1.&nbsp;Total duration of examination is 120 minutes</span></span></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">2.&nbsp;The clock will be set at the server. The countdown timer in the top right corner of screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself. You will not be required to end or submit your examination.</span></span></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">3.&nbsp;The question palette displayed on the right side of screen will show the status of each question using one of the following symbols:</span></span></span></p><p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">&nbsp;<img alt="" data-mce-src="http://campusquizkybv.blob.core.windows.net/abhyaastestsitemimages/635956959773049129_6744725.png" height="52" src="./Start Test_files/635956959773049129_6744725.png" width="50">&nbsp;You have not visited the question yet.</span></span></span></p><p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;"><img alt="" data-mce-src="http://campusquizkybv.blob.core.windows.net/abhyaastestsitemimages/635956960338999948_9395161.png" height="49" src="./Start Test_files/635956960338999948_9395161.png" width="55">&nbsp;You have not answered the question.</span></span></span></p><p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;"><img alt="" data-mce-src="http://campusquizkybv.blob.core.windows.net/abhyaastestsitemimages/635956960738971877_8213126.png" height="49" src="./Start Test_files/635956960738971877_8213126.png" width="59">&nbsp;You have answered the question.</span></span></span></p><p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;"><img alt="" data-mce-src="http://campusquizkybv.blob.core.windows.net/abhyaastestsitemimages/635956961193386364_3051152.png" height="52" src="./Start Test_files/635956961193386364_3051152.png" width="53">&nbsp;You have NOT answered the question, but have marked the question for review.</span></span></span></p><p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">	<span style="color:#000;"><img alt="" data-mce-src="http://campusquizkybv.blob.core.windows.net/abhyaastestsitemimages/635956961506000641_6807774.png" height="55" src="./Start Test_files/635956961506000641_6807774.png" style="font-family: &quot;times new roman&quot;, times, serif; font-size: 14px;" width="58"><span style="font-family: &quot;times new roman&quot;, times, serif; font-size: 14px;">&nbsp;You have answered the question, but marked it for review.</span></span></p><p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">The marked for Review status for a question simply indicates that you would like to look at that question again.</span></span></span></p><p style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;"><strong>Navigating to a Question:</strong></span></span></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">4.&nbsp;To answer a question, do the following:</span></span></span></p><ul style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">	<li>		<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">Click on the question number in the Question palette at the right of your screen to go to that numbered question directly. Note that using this option does NOT save your answer to the current question.</span></span></span></li>	<li>		<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">Click on&nbsp;<strong>Save &amp; Next</strong>&nbsp;to save your answer for the current question and then go the next question.</span></span></span></li>	<li>		<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">Click on&nbsp;<strong>Mark for Review &amp; Next</strong>&nbsp;to save your answer for the current question, mark it for review, and then go to the next question.</span></span></span></li></ul><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;"><strong style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">Answering a Question:</strong></span></span></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">5.&nbsp;Procedure for answering a multiple choice type question:</span></span></span></p><ul style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">	<li>		<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">To select your answer, click on the button of one of the options</span></span></span></li>	<li>		<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">To deselect your chosen answer, click on the button of the chosen option again or click on the&nbsp;<strong>Clear Response</strong>&nbsp;button</span></span></span></li>	<li>		<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">To change your chosen answer, click on the button of another option</span></span></span></li>	<li>		<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">To save your answer, you MUST click on the&nbsp;<strong>Save &amp; Next</strong>&nbsp;button</span></span></span></li>	<li>		<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">To mark the question for review, click on the&nbsp;<strong>Mark for Review &amp; Next</strong>&nbsp;button.</span></span></span></li></ul><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">6.&nbsp;To change your answer to a question that has already been answered, first select that question for answering and then follow the procedure for answering that type of question.</span></span></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;"><strong style="color: rgb(0, 0, 0); font-family: &quot;Times New Roman&quot;; font-size: medium;">Navigating through sections:</strong></span></span></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">7.&nbsp;Sections in this question paper are displayed on the top bar of the screen. Questions in a section can be viewed by clicking on the section name. The section you are currently viewing is highlighted.</span></span></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">8.&nbsp;After clicking the save &amp; Next button on the last question for a section, you will automatically be taken to the first question of the next section.</span></span></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">9.&nbsp;You can shuffle between sections and questions anytime during the examination as per your convenience only during the time stipulated.</span></span></span></p><p>	<span style="color:#000;"><span style="font-size: 14px;"><span style="font-family: &quot;times new roman&quot;, times, serif;">10.&nbsp;Candidate can view the corresponding section summary as part of the legend that appears in every section above the question palette.</span></span></span></p></font>
+                            </td><td>&nbsp;</td>
+
+                            
+                            
+                                </tr><tr><td colspan="2">
+                                    <input type="checkbox" name="testConsent" checked="true" style="display: none;">
+                                </td><td>&nbsp;</td>
+
+                            
+                            </tr><tr><td colspan="2" align="center">
+                                
+                                
+                                
+                                     
+                                
+                                
+                                
+                                    
+                                        
+                                            
+                                            
+                                            
+                                            
+                                                <input type="button" value="Continue" onclick="startTest(&#39;160&#39;,&#39;7975&#39;,&#39;0&#39;)" class="button123 normalButton">
+                                            
+                                        
+                                    
+                                    
+                                
+
+                                
+                                
+                                
+                                
+                                    <input type="button" value="Cancel" onclick="window.close()" class="button123 normalButton">
+                                
+                            </td><td>&nbsp;</td>
+
+                        </tr></tbody></table>
+                    </td>
+
+                
+                
+            </tr></tbody></table></td></tr>
+
+        <tr><td colspan="2">&nbsp;</td></tr>
+</tbody></table></td></tr>
+</tbody></table></td></tr></tbody></table>
+</form>
+        
+    
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-resizable ui-dialog-buttons" tabindex="-1" role="dialog" aria-labelledby="ui-id-1" style="display: none; outline: 0px; z-index: 1000; position: absolute;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"><span id="ui-id-1" class="ui-dialog-title">Enter Password</span><a href="http://abhyaas.edusquares.com/abhyaas/popup/OnlineTest.do?reqCode=preStartTest#" class="ui-dialog-titlebar-close ui-corner-all" role="button"><span class="ui-icon ui-icon-closethick">close</span></a></div><div id="dialog-form" style="" class="ui-dialog-content ui-widget-content">
+            <form>
+                <table>
+                    <tbody><tr>
+                        <td><label for="testpassword" style="font-weight: bold; height: 35px;">Student Test Password:</label></td>
+                        <td>
+                            <input id="testpassword" name="testpassword" type="password" class="textbox">
+                        </td>
+                    </tr>
+                    
+                        
+                    
+                </tbody></table>
+                <div id="loading"></div>
+            </form>
+        </div><div class="ui-resizable-handle ui-resizable-n" style="z-index: 1000;"></div><div class="ui-resizable-handle ui-resizable-e" style="z-index: 1000;"></div><div class="ui-resizable-handle ui-resizable-s" style="z-index: 1000;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 1000;"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se ui-icon-grip-diagonal-se" style="z-index: 1000;"></div><div class="ui-resizable-handle ui-resizable-sw" style="z-index: 1000;"></div><div class="ui-resizable-handle ui-resizable-ne" style="z-index: 1000;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 1000;"></div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Start Test</span></button><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Cancel</span></button></div></div></div></body></html>
