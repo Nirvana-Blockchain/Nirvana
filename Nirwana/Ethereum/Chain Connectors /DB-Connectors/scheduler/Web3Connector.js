@@ -14,14 +14,15 @@ exports.invoke = async db => {
   const provider = new Web3.providers.HttpProvider(url);
   var web3 = new Web3(provider);
 
-  startFetchingData(web3);
+  startFetchingData(db, web3);
 };
 
-async function startFetchingData(web3) {
+async function startFetchingData(db, web3) {
   var number = await web3.eth.getBlockNumber();
   for (var i = 0; i < number; i++) {
     var blockInfo = await web3.eth.getBlock(i);
     console.log(blockInfo);
+    DBUtils.saveBlock(db, blockInfo);
   }
 }
 

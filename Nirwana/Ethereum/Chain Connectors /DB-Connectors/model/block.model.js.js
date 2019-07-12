@@ -12,13 +12,13 @@ module.exports = sequelize => {
         autoIncrement: true
       },
       author: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       difficulty: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       extraData: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       gasLimit: {
         type: Sequelize.BIGINT
@@ -27,34 +27,34 @@ module.exports = sequelize => {
         type: Sequelize.BIGINT
       },
       hash: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       logsBloom: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       number: {
         type: Sequelize.BIGINT
       },
       parentHash: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       receiptsRoot: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       sealFields: {
-        type: Sequelize.ARRAY
+        type: Sequelize.ARRAY(Sequelize.TEXT)
       },
       sha3Uncles: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       signature: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       size: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       stateRoot: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       setp: {
         type: Sequelize.INTEGER
@@ -63,16 +63,16 @@ module.exports = sequelize => {
         type: Sequelize.BIGINT
       },
       totalDifficulty: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       transactions: {
-        type: Sequelize.ARRAY
+        type: Sequelize.ARRAY(Sequelize.TEXT)
       },
       transactionsRoot: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       uncles: {
-        type: Sequelize.STRING
+        type: Sequelize.ARRAY(Sequelize.TEXT)
       }
     },
     {

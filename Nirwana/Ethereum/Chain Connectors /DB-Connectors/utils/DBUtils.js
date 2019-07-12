@@ -1,6 +1,4 @@
-var db = require("../config/db");
-
-exports.saveBlock = async block => {
+exports.saveBlock = (db, block) => {
   var dataToInsert = {
     author: block.author,
     difficulty: block.difficulty,
@@ -22,12 +20,15 @@ exports.saveBlock = async block => {
     timestamp: block.timestamp,
     totalDifficulty: block.totalDifficulty,
     transactions: block.transactions,
-    transactionsRoot: block.transactionsRoot,
-    uncles: block.uncles
+    transactionsRoot: block.transactionsRoot
   };
 
   db.BlockTable.create(dataToInsert).then(
-    function(result) {},
-    function(error) {}
+    function(result) {
+      console.log(" result Success", result);
+    },
+    function(error) {
+      console.log(" result Success", error);
+    }
   );
 };
