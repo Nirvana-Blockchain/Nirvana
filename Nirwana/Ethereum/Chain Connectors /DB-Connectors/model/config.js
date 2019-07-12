@@ -1,6 +1,6 @@
 module.exports = {
   /** *************** DB Schema ****************** */
-  DB_SCHEMA: "Data",
+  DB_SCHEMA: "BChainData",
   /** *************** USER  ****************** */
-  TABLE_USER: "block_data"
+  TABLE_BLOCK: "block_data"
 };

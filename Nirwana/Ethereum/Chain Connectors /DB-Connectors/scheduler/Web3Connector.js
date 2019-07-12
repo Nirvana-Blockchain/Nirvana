@@ -3,8 +3,9 @@
  */
 var Web3 = require("web3");
 var Config = require("../config/Config");
+var DBUtils = require("../utils/DBUtils");
+
 exports.invoke = async db => {
-  dataBase = db;
   var url =
     "http://" +
     Config.getConfig().GETH_HOSTNAME +
@@ -12,18 +13,16 @@ exports.invoke = async db => {
     Config.getConfig().GETH_RPCPORT;
   const provider = new Web3.providers.HttpProvider(url);
   var web3 = new Web3(provider);
-  var number = await web3.eth.getBlockNumber();
-  web3.eth.getTransactionFromBlock("0x0", number).then(console.log);
 
   startFetchingData(web3);
 };
 
 async function startFetchingData(web3) {
-  // web3.eth.filter("latest", function(error, result) {
-  //   if (!error) {
-  //     console.log("=================", result);
-  //   }
-  // });
+  var number = await web3.eth.getBlockNumber();
+  for (var i = 0; i < number; i++) {
+    var blockInfo = await web3.eth.getBlock(i);
+    console.log(blockInfo);
+  }
 }
 
 function processBlock(block) {}

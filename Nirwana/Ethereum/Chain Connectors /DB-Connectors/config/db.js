@@ -8,8 +8,8 @@ const db = {};
 db.sequelize = sequelize;
 
 /******************** User *************************/
-// db.Users = require("../model/user/user.model")(sequelize);
-// db.Users.sync({ force: false });
+db.BlockTable = require("../model/block.model.js")(sequelize);
+db.BlockTable.sync({ force: false });
 
 schedulerInvoker.invokeSchedulers(db);
 configHandler.fetchCongig(db);
