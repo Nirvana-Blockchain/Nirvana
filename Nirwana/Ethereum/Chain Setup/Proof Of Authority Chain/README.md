@@ -1,5 +1,5 @@
 # Private Ethereum network
-1. Install Parity using below command(only for LINUX)
+1. Install Parity using below command(only for LINUX)<br>
     $ bash <(curl https://get.parity.io -L)
 	It will install and configure the Parity Ethereum client
 2. Download genesis file, and modify networkid as per choice
