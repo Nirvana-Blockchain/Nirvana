@@ -7,9 +7,16 @@ const db = {};
 
 db.sequelize = sequelize;
 
-/******************** User *************************/
+/******************** Block *************************/
 db.BlockTable = require("../model/block.model.js")(sequelize);
 db.BlockTable.sync({ force: false });
+
+/******************** User *************************/
+db.Transaction = require("../model/transaction.model.js")(sequelize);
+db.Transaction.sync({ force: false });
+
+db.Receipt = require("../model/")(sequelize);
+db.Receipt.sync({ force: false });
 
 schedulerInvoker.invokeSchedulers(db);
 configHandler.fetchCongig(db);
