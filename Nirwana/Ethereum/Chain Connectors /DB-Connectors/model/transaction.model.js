@@ -25,7 +25,7 @@ module.exports = sequelize => {
         type: Sequelize.TEXT
       },
       gas: {
-        type: Sequelize.IN
+        type: Sequelize.INTEGER
       },
       gasPrice: {
         type: Sequelize.INTEGER

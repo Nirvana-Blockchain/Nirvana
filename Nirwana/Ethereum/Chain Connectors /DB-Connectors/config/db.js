@@ -12,13 +12,13 @@ db.BlockTable = require("../model/block.model.js")(sequelize);
 db.BlockTable.sync({ force: false });
 
 /******************** User *************************/
-db.Transaction = require("../model/transaction.model.js")(sequelize);
+db.Transaction = require("../model/transaction.model")(sequelize);
 db.Transaction.sync({ force: false });
 
-db.Receipt = require("../model/")(sequelize);
+db.Receipt = require("../model/receipt.model")(sequelize);
 db.Receipt.sync({ force: false });
 
-schedulerInvoker.invokeSchedulers(db);
-configHandler.fetchCongig(db);
+db.Logs = require("../model/logs.model")(sequelize);
+db.Logs.sync({ force: false });
 
 module.exports = db;

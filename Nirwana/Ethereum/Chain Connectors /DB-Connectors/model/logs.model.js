@@ -42,7 +42,7 @@ module.exports = sequelize => {
         type: Sequelize.TEXT
       },
       transactionLogIndex: {
-        type: BIGINT
+        type: Sequelize.BIGINT
       },
       type: {
         type: Sequelize.TEXT

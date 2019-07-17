@@ -4,7 +4,10 @@
 var Web3 = require("web3");
 var Config = require("../config/Config");
 var DBUtils = require("../utils/DBUtils");
-
+var async = require("async");
+var totalNumberOfBlocks = 10000;
+var numberOfThreads = 20;
+var web3;
 exports.invoke = async db => {
   var url =
     "http://" +
@@ -12,66 +15,112 @@ exports.invoke = async db => {
     ":" +
     Config.getConfig().GETH_RPCPORT;
   const provider = new Web3.providers.HttpProvider(url);
-  var web3 = new Web3(provider);
-
-  startFetchingData(db, web3);
+  web3 = new Web3(provider);
+  totalNumberOfBlocks = await web3.eth.getBlockNumber();
+  startWritingData(224549, 224549 + numberOfThreads);
 };
-
+//================================== Process Block =============================================
 async function startWritingData(fromBlock, toBlock) {
   var tasksArray = [];
 
-  for (var blockNumber = fromBlock; blockNumber < toBlock; blockNumber++) {
-    tasksArray.push(function(blockNumber) {
-      processBlock(blockNumber);
-    });
-  }
+  if (toBlock <= totalNumberOfBlocks) {
+    console.log("Block Number ===== ", fromBlock, toBlock);
 
-  async.parallel(tasksArray, function(err, results) {
-    startWritingData(fromBlock = toBlock+1  , toBlock+10);
-  });
+    for (var blockNumber = fromBlock; blockNumber < toBlock; blockNumber++) {
+      tasksArray.push(processBlock.bind(null, blockNumber));
+    }
 
-}
-
-function processBlock(blockNumber);
-{
-  var blockInfo = await web3.eth.getBlock(blockNumber);
-  if (blockInfo.transactions && blockInfo.transactions.length > 0) {
-
-    
-
-    
-    blockInfo.transactions.forEach(async element => {
-      var transactionInfo = await web3.eth.getTransaction(element);
-      var transactionReceipt = await web3.eth.getTransactionReceipt(element);
-      console.log("Transaction  ========", transactionInfo);
-      console.log("transactionReceipt  ========", transactionReceipt);
-
-      if (transactionReceipt.logs && transactionReceipt.logs.length) {
-        console.log("Transaction  ========", transactionReceipt.logs);
-        transactionReceipt.logs.forEach(log => {
-          DBUtils.saveLogs(db, log);
-        });
+    async.parallel(tasksArray, function(err, results) {
+      if (toBlock <= totalNumberOfBlocks + 1) {
+        startBlock = toBlock + 1;
+        endBlock = toBlock + numberOfThreads;
+        startWritingData(startBlock, endBlock);
+      } else {
+        console.log("done writing with data ");
       }
     });
   } else {
+    console.log("finish... block");
+  }
+}
+
+async function processBlock(blockNumber, callback) {
+  var blockInfo = await web3.eth.getBlock(blockNumber);
+  console.log(
+    blockNumber,
+    "Transaction count is  ",
+    blockInfo.transactions.length
+  );
+  var result = await DBUtils.saveBlock(blockInfo);
+
+  if (blockInfo.transactions && blockInfo.transactions.length > 0) {
+    var length = blockInfo.transactions.length;
+    startWritingTransactionData(
+      0,
+      length > numberOfThreads ? numberOfThreads : length,
+      blockInfo.transactions,
+      callback
+    );
+  } else {
     // Save block info only
+
+    callback(null, "");
+  }
+}
+//=================================================================================================
+
+async function startWritingTransactionData(
+  fromTransaction,
+  toTransactoin,
+  transactionsArray,
+  blockCallBack
+) {
+  var tasksArray = [];
+
+  if (toTransactoin <= transactionsArray.length) {
+    console.log("Block Number ===== ", fromTransaction, toTransactoin);
+
+    for (
+      var transaction = fromTransaction;
+      transaction < toTransactoin;
+      transaction++
+    ) {
+      tasksArray.push(
+        processTransaction.bind(null, transactionsArray[transaction])
+      );
+    }
+
+    async.parallel(tasksArray, function(err, results) {
+      if (toTransactoin <= totalNumberOfBlocks + 1) {
+        startTransaction = toTransactoin + 1;
+        endTransaction = toTransactoin + numberOfThreads;
+        startWritingTransactionData(
+          startTransaction,
+          endTransaction,
+          transactionsArray
+        );
+      } else {
+        blockCallBack(null, " Done with transaction writing");
+      }
+    });
+  } else {
+    console.log("Transactoin completed....");
+    blockCallBack(null, " Done with transaction writing");
   }
 }
 
-
-
-
-function processTransaction()
-{
-
-}
-
-async function startFetchingData(db, web3) {
-  var number = await web3.eth.getBlockNumber();
-  console.log(number);
-  for (var i = 227888; i < number; i++) {
-    console.log(i, "  ========");
-
-    // DBUtils.saveBlock(db, blockInfo);
+async function processTransaction(transactionHash, transactionCallback) {
+  var transactionInfo = await web3.eth.getTransaction(transactionHash);
+  await DBUtils.saveTransaction(transactionInfo);
+  var transactionReceipt = await web3.eth.getTransactionReceipt(
+    transactionHash
+  );
+  await DBUtils.saveTransactionReceipt(transactionReceipt);
+  if (transactionReceipt.logs && transactionReceipt.logs.length) {
+    transactionReceipt.logs.forEach(async log => {
+      await DBUtils.saveLogs(db, log);
+    });
   }
+
+  transactionCallback(null, "");
 }

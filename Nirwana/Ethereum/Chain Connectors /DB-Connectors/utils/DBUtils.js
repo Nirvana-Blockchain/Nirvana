@@ -23,14 +23,7 @@ exports.saveBlock = (db, block) => {
     transactionsRoot: block.transactionsRoot
   };
 
-  db.BlockTable.create(dataToInsert).then(
-    function(result) {
-      console.log(" result Success", result);
-    },
-    function(error) {
-      console.log(" result Success", error);
-    }
-  );
+  return db.BlockTable.create(dataToInsert);
 };
 
 exports.saveTransactionReceipt = (db, block) => {
@@ -49,14 +42,7 @@ exports.saveTransactionReceipt = (db, block) => {
     transactionIndex: transaction.transactionIndex
   };
 
-  db.BlockTable.create(dataToInsert).then(
-    function(result) {
-      console.log(" result Success", result);
-    },
-    function(error) {
-      console.log(" result Success", error);
-    }
-  );
+  return db.BlockTable.create(dataToInsert);
 };
 
 exports.saveTransaction = (db, transaction) => {
@@ -83,14 +69,7 @@ exports.saveTransaction = (db, transaction) => {
     value: transaction.value
   };
 
-  db.TransactionTable.create(dataToInsert).then(
-    function(result) {
-      console.log(" result Success", result);
-    },
-    function(error) {
-      console.log(" result Success", error);
-    }
-  );
+  return db.TransactionTable.create(dataToInsert);
 };
 
 exports.saveLogs = (db, logs) => {
@@ -109,12 +88,5 @@ exports.saveLogs = (db, logs) => {
     type: logs.type
   };
 
-  db.TransactionTable.create(dataToInsert).then(
-    function(result) {
-      console.log(" result Success", result);
-    },
-    function(error) {
-      console.log(" result Success", error);
-    }
-  );
+  return db.TransactionTable.create(dataToInsert);
 };
