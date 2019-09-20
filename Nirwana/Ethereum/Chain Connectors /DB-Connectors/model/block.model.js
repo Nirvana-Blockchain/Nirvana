@@ -7,7 +7,7 @@ module.exports = sequelize => {
     dbInfo.TABLE_BLOCK,
     {
       block_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         primaryKey: true,
         autoIncrement: true
       },
@@ -21,10 +21,10 @@ module.exports = sequelize => {
         type: Sequelize.TEXT
       },
       gasLimit: {
-        type: Sequelize.BIGINT
+        type: Sequelize.NUMERIC
       },
       gasUsed: {
-        type: Sequelize.BIGINT
+        type: Sequelize.NUMERIC
       },
       hash: {
         type: Sequelize.TEXT
@@ -33,7 +33,7 @@ module.exports = sequelize => {
         type: Sequelize.TEXT
       },
       number: {
-        type: Sequelize.BIGINT
+        type: Sequelize.NUMERIC
       },
       parentHash: {
         type: Sequelize.TEXT
@@ -57,10 +57,10 @@ module.exports = sequelize => {
         type: Sequelize.TEXT
       },
       setp: {
-        type: Sequelize.INTEGER
+        type: Sequelize.NUMERIC
       },
       timestamp: {
-        type: Sequelize.BIGINT
+        type: Sequelize.NUMERIC
       },
       totalDifficulty: {
         type: Sequelize.TEXT

@@ -26,23 +26,23 @@ exports.saveBlock = (db, block) => {
   return db.BlockTable.create(dataToInsert);
 };
 
-exports.saveTransactionReceipt = (db, block) => {
+exports.saveTransactionReceipt = (db, receipt) => {
   var dataToInsert = {
-    blockHash: transaction.blockHash,
-    blockNumber: transaction.blockNumber,
-    contractAddress: transaction.contractAddress,
-    cumulativeGasUsed: transaction.cumulativeGasUsed,
-    from: transaction.from,
-    gasUsed: transaction.gasUsed,
-    logsBloom: transaction.logsBloom,
-    root: transaction.root,
-    status: transaction.status,
-    to: transaction.to,
-    transactionHash: transaction.transactionHash,
-    transactionIndex: transaction.transactionIndex
+    blockHash: receipt.blockHash,
+    blockNumber: receipt.blockNumber,
+    contractAddress: receipt.contractAddress,
+    cumulativeGasUsed: receipt.cumulativeGasUsed,
+    from: receipt.from,
+    gasUsed: receipt.gasUsed,
+    logsBloom: receipt.logsBloom,
+    root: receipt.root,
+    status: receipt.status,
+    to: receipt.to,
+    transactionHash: receipt.transactionHash,
+    transactionIndex: receipt.transactionIndex
   };
 
-  return db.BlockTable.create(dataToInsert);
+  return db.Receipt.create(dataToInsert);
 };
 
 exports.saveTransaction = (db, transaction) => {
@@ -69,7 +69,7 @@ exports.saveTransaction = (db, transaction) => {
     value: transaction.value
   };
 
-  return db.TransactionTable.create(dataToInsert);
+  return db.Transaction.create(dataToInsert);
 };
 
 exports.saveLogs = (db, logs) => {
@@ -88,5 +88,5 @@ exports.saveLogs = (db, logs) => {
     type: logs.type
   };
 
-  return db.TransactionTable.create(dataToInsert);
+  return db.Logs.create(dataToInsert);
 };

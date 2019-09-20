@@ -1,8 +1,6 @@
 const Sequelize = require("sequelize");
 
 var envconfig = require("./ServerConfig");
-var Web3Connector = require("./scheduler/Web3Connector");
-var db = require("./config/db");
 
 const sequelize = new Sequelize(
   envconfig.env.conf.DB_NAME,
@@ -25,7 +23,6 @@ const sequelize = new Sequelize(
 sequelize
   .authenticate()
   .then(() => {
-    Web3Connector.invoke(db);
     console.log("Connection has been established successfully.");
   })
   .catch(err => {

@@ -6,11 +6,16 @@ module.exports = sequelize => {
   return sequelize.define(
     dbInfo.TABLE_TRANSACTION,
     {
+      transaction_id: {
+        type: Sequelize.BIGINT,
+        primaryKey: true,
+        autoIncrement: true
+      },
       blockHash: {
         type: Sequelize.TEXT
       },
       blockNumber: {
-        type: Sequelize.BIGINT
+        type: Sequelize.NUMERIC
       },
       chainId: {
         type: Sequelize.TEXT
@@ -25,10 +30,10 @@ module.exports = sequelize => {
         type: Sequelize.TEXT
       },
       gas: {
-        type: Sequelize.INTEGER
+        type: Sequelize.NUMERIC
       },
       gasPrice: {
-        type: Sequelize.INTEGER
+        type: Sequelize.NUMERIC
       },
       hash: {
         type: Sequelize.TEXT
@@ -64,7 +69,7 @@ module.exports = sequelize => {
         type: Sequelize.TEXT
       },
       value: {
-        type: Sequelize.INTEGER
+        type: Sequelize.NUMERIC
       }
     },
     {

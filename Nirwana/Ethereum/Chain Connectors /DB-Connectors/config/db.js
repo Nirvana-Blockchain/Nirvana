@@ -1,8 +1,6 @@
 "use strict";
 const sequelize = require("../DBConfig");
-var schedulerInvoker = require("../scheduler/SchedulerInvoker");
-var configHandler = require("../utils/ConfigHandler");
-
+var Web3Connector = require("../scheduler/Web3Connector");
 const db = {};
 
 db.sequelize = sequelize;
@@ -21,4 +19,5 @@ db.Receipt.sync({ force: false });
 db.Logs = require("../model/logs.model")(sequelize);
 db.Logs.sync({ force: false });
 
+Web3Connector.invoke(db);
 module.exports = db;

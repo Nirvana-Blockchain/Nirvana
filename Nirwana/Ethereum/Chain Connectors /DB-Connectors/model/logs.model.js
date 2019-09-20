@@ -7,7 +7,7 @@ module.exports = sequelize => {
     dbInfo.TABLE_LOGS,
     {
       log_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         primaryKey: true,
         autoIncrement: true
       },
@@ -15,7 +15,7 @@ module.exports = sequelize => {
         type: Sequelize.TEXT
       },
       blockNumber: {
-        type: Sequelize.BIGINT
+        type: Sequelize.NUMERIC
       },
       address: {
         type: Sequelize.TEXT
@@ -42,7 +42,7 @@ module.exports = sequelize => {
         type: Sequelize.TEXT
       },
       transactionLogIndex: {
-        type: Sequelize.BIGINT
+        type: Sequelize.TEXT
       },
       type: {
         type: Sequelize.TEXT
